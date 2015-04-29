@@ -1,1 +1,1 @@
-include ':Eventcast'
+include ':Eventcast', ':Simple'
