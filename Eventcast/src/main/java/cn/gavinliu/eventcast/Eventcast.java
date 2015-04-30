@@ -1,9 +1,16 @@
 package cn.gavinliu.eventcast;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 /**
  * Created by gavin on 15-3-25.
  */
 public class Eventcast {
+
+    private final Map<ReceiverAction, CopyOnWriteArrayList<Receptor>> mReceptorMap = new ConcurrentHashMap<ReceiverAction, CopyOnWriteArrayList<Receptor>>();
+
 
 
     public void register(Object receiver) {
@@ -51,7 +58,9 @@ public class Eventcast {
     }
 
 
-    private void notify(ReceiverMethod method, Object event){
+    private void notify(ReceiverAction method, Object event){
 
     }
+
+
 }
