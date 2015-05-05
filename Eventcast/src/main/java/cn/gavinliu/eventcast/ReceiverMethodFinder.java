@@ -1,48 +1,65 @@
 package cn.gavinliu.eventcast;
 
+import android.util.Log;
+
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import cn.gavinliu.eventcast.annotation.Receiver;
+import cn.gavinliu.eventcast.event.EventAction;
+import cn.gavinliu.eventcast.utils.Utils;
 
 /**
  * Created by gavin on 15-4-29.
  */
 public class ReceiverMethodFinder {
 
-    Map<ReceiverAction, CopyOnWriteArrayList<Receptor>> mReceptorMap;
+    Map<EventAction, CopyOnWriteArrayList<Receptor>> mReceptorMap;
 
-    public ReceiverMethodFinder(Map<ReceiverAction, CopyOnWriteArrayList<Receptor>> receptorMap) {
+    public ReceiverMethodFinder(Map<EventAction, CopyOnWriteArrayList<Receptor>> receptorMap) {
         this.mReceptorMap = receptorMap;
     }
 
     public void findReceiverMethod(Object receiver) {
         Class<?> clazz = receiver.getClass();
 
-        if (clazz != null && isSystemClass(clazz.getName())) {
+        if (clazz != null && !Utils.isSystemClass(clazz.getName())) {
             Method[] allMethods = clazz.getDeclaredMethods();
 
             for (Method method : allMethods) {
                 Receiver annotation = method.getAnnotation(Receiver.class);
-                Class<?>[] parameterTypes = method.getParameterTypes();
+                if (annotation != null) {
+                    Class<?>[] parameterTypes = method.getParameterTypes();
 
-                String tag = annotation.tag();
-                String mode = annotation.mode();
 
-                String parameterTypesName = makeParameterTypesName(parameterTypes);
-                String methodName = method.getName();
+                    String mode = annotation.mode();
+                    String parameterTypesName = Utils.makeParameterTypesName(parameterTypes);
 
-                Receptor receptor = new Receptor(receiver, method, parameterTypes, mode);
-                ReceiverAction receiverAction = new ReceiverAction(clazz.getName(), methodName, parameterTypesName, tag);
+                    String className = null;
+                    String methodName = null;
+                    String tag = annotation.tag();
+                    if (tag.equals(Receiver.NULL_TAG)) {
+                        tag = null;
+                        className = clazz.getName();
+                        methodName = method.getName();
+                    }
 
-                add(receiverAction, receptor);
+                    Receptor receptor = new Receptor(receiver, method, parameterTypes, mode);
+                    EventAction receiverAction = new EventAction(className, methodName, parameterTypesName, tag);
+
+                    add(receiverAction, receptor);
+                }
             }
+
 
         }
     }
 
-    private void add(ReceiverAction receiverAction, Receptor receptor) {
+    private void add(EventAction receiverAction, Receptor receptor) {
         CopyOnWriteArrayList<Receptor> receptors = mReceptorMap.get(receiverAction);
 
         if (receptors == null) {
@@ -58,19 +75,28 @@ public class ReceiverMethodFinder {
         mReceptorMap.put(receiverAction, receptors);
     }
 
-    private boolean isSystemClass(String name) {
-        return name.startsWith("java.") || name.startsWith("javax.") || name.startsWith("android.");
-    }
+    public void removeReceiverMethod(Object receiver) {
+        Iterator<CopyOnWriteArrayList<Receptor>> iterator = mReceptorMap.values().iterator();
+        while (iterator.hasNext()) {
+            CopyOnWriteArrayList<Receptor> receptors = iterator.next();
+            if (receptors != null) {
+                List<Receptor> findReceptors = new ArrayList<Receptor>();
 
-    private String makeParameterTypesName(Class<?>[] parameterTypes) {
-        if (parameterTypes == null) {
-            return null;
+                for (Receptor receptor : receptors) {
+                    if (receptor.receiver.equals(receiver)) {
+                        Log.d("", "### 移除订阅 " + receiver.getClass().getName());
+                        findReceptors.add(receptor);
+                    }
+                }
+
+                receptors.removeAll(findReceptors);
+            }
+
+            if (receptors == null || receptors.size() == 0) {
+                iterator.remove();
+            }
         }
-        String name = "";
-        for (Class<?> type : parameterTypes) {
-            name += type.getName() + ",";
-        }
-        return name;
+
     }
 
 }

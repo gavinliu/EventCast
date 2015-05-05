@@ -3,14 +3,16 @@ package cn.gavinliu.eventcast;
 import java.lang.reflect.Method;
 
 /**
+ * 接收器
+ *
  * Created by gavin on 15-4-29.
  */
 public class Receptor {
 
-    Object receiver;
-    Method method;
-    Class<?>[] parameterTypes;
-    String mode;
+    public Object receiver;
+    public Method method;
+    public Class<?>[] parameterTypes;
+    public String mode;
 
     public Receptor(Object receiver, Method method, Class<?>[] parameterTypes, String mode) {
         this.receiver = receiver;
@@ -26,11 +28,44 @@ public class Receptor {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((receiver == null) ? 0 : receiver.hashCode());
+        result = prime * result + ((method == null) ? 0 : method.hashCode());
+        result = prime * result + ((parameterTypes == null) ? 0 : parameterTypes.hashCode());
+        result = prime * result + ((mode == null) ? 0 : mode.hashCode());
+        return result;
     }
 
     @Override
     public boolean equals(Object o) {
-        return super.equals(o);
+        if (this == o) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        if (getClass() != o.getClass()) {
+            return false;
+        }
+
+        Receptor other = (Receptor) o;
+        if (receiver == null) {
+            if (other.receiver != null) {
+                return false;
+            }
+        } else if (!receiver.equals(other.receiver)) {
+            return false;
+        }
+
+        if (method == null) {
+            if (other.method != null) {
+                return false;
+            }
+        } else if (!method.equals(other.method)) {
+            return false;
+        }
+
+        return true;
     }
 }
