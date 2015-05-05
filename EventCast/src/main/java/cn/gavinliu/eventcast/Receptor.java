@@ -11,13 +11,11 @@ public class Receptor {
 
     public Object receiver;
     public Method method;
-    public Class<?>[] parameterTypes;
     public String mode;
 
-    public Receptor(Object receiver, Method method, Class<?>[] parameterTypes, String mode) {
+    public Receptor(Object receiver, Method method, String mode) {
         this.receiver = receiver;
         this.method = method;
-        this.parameterTypes = parameterTypes;
         this.mode = mode;
     }
 
@@ -32,7 +30,6 @@ public class Receptor {
         int result = 1;
         result = prime * result + ((receiver == null) ? 0 : receiver.hashCode());
         result = prime * result + ((method == null) ? 0 : method.hashCode());
-        result = prime * result + ((parameterTypes == null) ? 0 : parameterTypes.hashCode());
         result = prime * result + ((mode == null) ? 0 : mode.hashCode());
         return result;
     }

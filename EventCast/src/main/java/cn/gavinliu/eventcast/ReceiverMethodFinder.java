@@ -48,7 +48,7 @@ public class ReceiverMethodFinder {
                         methodName = method.getName();
                     }
 
-                    Receptor receptor = new Receptor(receiver, method, parameterTypes, mode);
+                    Receptor receptor = new Receptor(receiver, method, mode);
                     EventAction receiverAction = new EventAction(className, methodName, parameterTypesName, tag);
 
                     add(receiverAction, receptor);
