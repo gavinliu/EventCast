@@ -9,21 +9,32 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <Button
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:gravity="center_vertical|start"
+        android:onClick="postByMethod"
+        android:text="Post by Method" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="a"
-        android:text="A" />
+        android:gravity="center_vertical|start"
+        android:onClick="postByMethodAndParam"
+        android:text="Post by Method And Param" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="b"
-        android:text="B" />
+        android:gravity="center_vertical|start"
+        android:onClick="postByTag"
+        android:text="Post by Tag" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|start"
+        android:onClick="postByTagAndParam"
+        android:text="Post by Tag and Param" />
 
 </LinearLayout>

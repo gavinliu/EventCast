@@ -9,7 +9,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import cn.gavinliu.eventcast.event.Event;
 import cn.gavinliu.eventcast.event.EventAction;
+import cn.gavinliu.eventcast.poster.AsyncThreadPoster;
 import cn.gavinliu.eventcast.poster.EventPoster;
+import cn.gavinliu.eventcast.poster.MainThreadPoster;
 import cn.gavinliu.eventcast.poster.Poster;
 import cn.gavinliu.eventcast.utils.Utils;
 
@@ -111,7 +113,9 @@ public class EventCast {
 
     private class EventDispatcher {
 
-        Poster defaultPoster = new EventPoster();
+        Poster mainPoster = new MainThreadPoster();
+        Poster postPoster = new EventPoster();
+        Poster asyncPoster = new AsyncThreadPoster();
 
         void dispatchEvents() {
             Queue<Event> eventQueue = mEventQueue.get();
@@ -124,7 +128,18 @@ public class EventCast {
                 }
 
                 for (Receptor receptor : receptors) {
-                    defaultPoster.post(receptor, event.data);
+                    switch (receptor.posterType) {
+                        case MAIN:
+                            mainPoster.post(receptor, event.data);
+                            break;
+                        case POST:
+                            postPoster.post(receptor, event.data);
+                            break;
+                        case ASYNC:
+                            asyncPoster.post(receptor, event.data);
+                            break;
+                    }
+
                 }
 
             }

@@ -11,6 +11,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import cn.gavinliu.eventcast.annotation.Receiver;
 import cn.gavinliu.eventcast.event.EventAction;
+import cn.gavinliu.eventcast.poster.PosterType;
 import cn.gavinliu.eventcast.utils.Utils;
 
 /**
@@ -36,7 +37,7 @@ public class ReceiverMethodFinder {
                     Class<?>[] parameterTypes = method.getParameterTypes();
 
 
-                    String mode = annotation.mode();
+                    PosterType posterType = annotation.posterType();
                     String parameterTypesName = Utils.makeParameterTypesName(parameterTypes);
 
                     String className = null;
@@ -48,7 +49,7 @@ public class ReceiverMethodFinder {
                         methodName = method.getName();
                     }
 
-                    Receptor receptor = new Receptor(receiver, method, mode);
+                    Receptor receptor = new Receptor(receiver, method, posterType);
                     EventAction receiverAction = new EventAction(className, methodName, parameterTypesName, tag);
 
                     add(receiverAction, receptor);

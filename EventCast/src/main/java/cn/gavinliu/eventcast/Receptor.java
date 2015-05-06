@@ -2,6 +2,8 @@ package cn.gavinliu.eventcast;
 
 import java.lang.reflect.Method;
 
+import cn.gavinliu.eventcast.poster.PosterType;
+
 /**
  * 接收器
  *
@@ -11,12 +13,12 @@ public class Receptor {
 
     public Object receiver;
     public Method method;
-    public String mode;
+    public PosterType posterType;
 
-    public Receptor(Object receiver, Method method, String mode) {
+    public Receptor(Object receiver, Method method, PosterType posterType) {
         this.receiver = receiver;
         this.method = method;
-        this.mode = mode;
+        this.posterType = posterType;
     }
 
     @Override
@@ -30,7 +32,7 @@ public class Receptor {
         int result = 1;
         result = prime * result + ((receiver == null) ? 0 : receiver.hashCode());
         result = prime * result + ((method == null) ? 0 : method.hashCode());
-        result = prime * result + ((mode == null) ? 0 : mode.hashCode());
+        result = prime * result + ((posterType == null) ? 0 : posterType.hashCode());
         return result;
     }
 

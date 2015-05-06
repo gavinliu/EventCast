@@ -6,6 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import cn.gavinliu.eventcast.EventCast;
+import cn.gavinliu.eventcast.poster.PosterType;
 
 /**
  * Event 接收器注解
@@ -19,6 +20,6 @@ public @interface Receiver {
 
     String tag() default NULL_TAG;
 
-    String mode();
+    PosterType posterType() default PosterType.MAIN;
 
 }

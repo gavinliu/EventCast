@@ -6,4 +6,5 @@ package cn.gavinliu.eventcast.poster;
 public enum PosterType {
 
     MAIN, ASYNC, POST
+
 }
