@@ -1,4 +1,4 @@
-package cn.gavinliu.eventcast;
+package cn.gavinliu.android.lib.eventcast;
 
 import android.util.Log;
 
@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import cn.gavinliu.eventcast.annotation.Receiver;
-import cn.gavinliu.eventcast.event.EventAction;
-import cn.gavinliu.eventcast.poster.PosterType;
-import cn.gavinliu.eventcast.utils.Utils;
+import cn.gavinliu.android.lib.eventcast.annotation.Receiver;
+import cn.gavinliu.android.lib.eventcast.event.EventAction;
+import cn.gavinliu.android.lib.eventcast.poster.PosterType;
+import cn.gavinliu.android.lib.eventcast.utils.Utils;
 
 /**
  * Created by gavin on 15-4-29.

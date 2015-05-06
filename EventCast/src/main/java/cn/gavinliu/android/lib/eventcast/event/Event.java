@@ -1,4 +1,4 @@
-package cn.gavinliu.eventcast.event;
+package cn.gavinliu.android.lib.eventcast.event;
 
 
 /**

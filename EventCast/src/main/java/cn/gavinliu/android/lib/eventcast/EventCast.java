@@ -1,4 +1,4 @@
-package cn.gavinliu.eventcast;
+package cn.gavinliu.android.lib.eventcast;
 
 import java.util.List;
 import java.util.Map;
@@ -7,13 +7,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import cn.gavinliu.eventcast.event.Event;
-import cn.gavinliu.eventcast.event.EventAction;
-import cn.gavinliu.eventcast.poster.AsyncThreadPoster;
-import cn.gavinliu.eventcast.poster.EventPoster;
-import cn.gavinliu.eventcast.poster.MainThreadPoster;
-import cn.gavinliu.eventcast.poster.Poster;
-import cn.gavinliu.eventcast.utils.Utils;
+import cn.gavinliu.android.lib.eventcast.event.Event;
+import cn.gavinliu.android.lib.eventcast.event.EventAction;
+import cn.gavinliu.android.lib.eventcast.poster.AsyncThreadPoster;
+import cn.gavinliu.android.lib.eventcast.poster.EventPoster;
+import cn.gavinliu.android.lib.eventcast.poster.MainThreadPoster;
+import cn.gavinliu.android.lib.eventcast.poster.Poster;
+import cn.gavinliu.android.lib.eventcast.utils.Utils;
 
 /**
  * Created by gavin on 15-3-25.

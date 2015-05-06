@@ -1,9 +1,9 @@
-package cn.gavinliu.eventcast.event;
+package cn.gavinliu.android.lib.eventcast.event;
 
-import cn.gavinliu.eventcast.annotation.Receiver;
+import cn.gavinliu.android.lib.eventcast.annotation.Receiver;
 
 /**
- * 通过 {@link cn.gavinliu.eventcast.annotation.Receiver}的信息 区别不同的接收器
+ * 通过 {@link cn.gavinliu.android.lib.eventcast.annotation.Receiver}的信息 区别不同的接收器
  * <p/>
  * 1.有设置Tag的Receiver,使用tag和parameterTypes区分;
  * 2.没设置Tag的Receiver,使用className,methodName,parameterTypes区分.

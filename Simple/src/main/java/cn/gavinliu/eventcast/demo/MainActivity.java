@@ -5,10 +5,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Toast;
 
-import cn.gavinliu.eventcast.EventCast;
-import cn.gavinliu.eventcast.annotation.Receiver;
-import cn.gavinliu.eventcast.poster.PosterType;
-
+import cn.gavinliu.android.lib.eventcast.EventCast;
+import cn.gavinliu.android.lib.eventcast.annotation.Receiver;
+import cn.gavinliu.android.lib.eventcast.poster.PosterType;
 
 public class MainActivity extends ActionBarActivity {
 

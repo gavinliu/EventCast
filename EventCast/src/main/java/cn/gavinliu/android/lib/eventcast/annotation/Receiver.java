@@ -1,12 +1,11 @@
-package cn.gavinliu.eventcast.annotation;
+package cn.gavinliu.android.lib.eventcast.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import cn.gavinliu.eventcast.EventCast;
-import cn.gavinliu.eventcast.poster.PosterType;
+import cn.gavinliu.android.lib.eventcast.poster.PosterType;
 
 /**
  * Event 接收器注解

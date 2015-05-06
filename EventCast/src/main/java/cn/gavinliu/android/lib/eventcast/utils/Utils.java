@@ -1,4 +1,4 @@
-package cn.gavinliu.eventcast.utils;
+package cn.gavinliu.android.lib.eventcast.utils;
 
 /**
  * Created by gavin on 15-5-5.

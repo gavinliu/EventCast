@@ -1,8 +1,8 @@
-package cn.gavinliu.eventcast;
+package cn.gavinliu.android.lib.eventcast;
 
 import java.lang.reflect.Method;
 
-import cn.gavinliu.eventcast.poster.PosterType;
+import cn.gavinliu.android.lib.eventcast.poster.PosterType;
 
 /**
  * 接收器
