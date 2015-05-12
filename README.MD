@@ -16,7 +16,7 @@ Gradle:
 compile 'cn.gavinliu.android.lib:EventCast:VERSION'
 ```
 
-### Register & UnRegister
+### Register & unregister
 
 ```java
 protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +28,7 @@ protected void onCreate(Bundle savedInstanceState) {
 @Override
 protected void onDestroy() {
     super.onDestroy();
-    EventCast.getInstance().unRegister(this);
+    EventCast.getInstance().unregister(this);
 }
 ```
 
@@ -101,6 +101,11 @@ public void postByMethodAndParam(String x) {
 
 EventCast.getInstance().post(MainActivity.class, "postByMethodAndParam", "Hello~");
 ```
+
+## Trap (important!)
+
+* If Receiver method has only one parameter, EventCast will use widely match policy. Your parameter type can be generics type.
+* Else EventCast will use strict match policy, so your parameter type can not be generics type.
 
 ## License
 

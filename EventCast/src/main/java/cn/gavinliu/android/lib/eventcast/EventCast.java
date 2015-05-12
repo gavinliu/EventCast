@@ -64,7 +64,7 @@ public class EventCast {
         }
     }
 
-    public void unRegister(Object receiver) {
+    public void unregister(Object receiver) {
         if (receiver == null) {
             throw new NullPointerException();
         }
