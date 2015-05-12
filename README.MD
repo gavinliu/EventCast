@@ -1,8 +1,7 @@
 ## EventCast
 A new EventCast for Android
 
-* Use ``@Receiver`` ``Method`` ``Parameter Type`` define ``EventAction``
-* A Event contains ``EventAction`` and ``Data``
+* Faster
 * Support Multi-Parameter
 
 ## Usage
@@ -35,14 +34,21 @@ protected void onDestroy() {
 
 ### Define Receiver
 
-+ Use ``@Receiver`` define a Receiver
++ Use ``@Receiver`` define a Receiver method
++ Tow kinds of Receiver
+  * Receiver has TAG : @Receiver(tag = "xx")
+  * Receiver no  TAG : @Receiver
++ @Receiver(posterType = PosterType.MAIN) define poster thread
 
 ### Post Event
 
-+ use ``eventCast.post``
+1. ``eventCast.post(tag, data...)``
+2. ``eventCast.post(class, method, data...)``
 
+* ``Receiver has TAG`` only use 1
+* ``Receiver no  TAG`` only use 2
 
-## Simple demo
+### Simple demo
 
 Support Multi-Parameter
 
