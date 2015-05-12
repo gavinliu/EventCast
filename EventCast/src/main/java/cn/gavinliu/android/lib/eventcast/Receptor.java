@@ -4,11 +4,6 @@ import java.lang.reflect.Method;
 
 import cn.gavinliu.android.lib.eventcast.poster.PosterType;
 
-/**
- * 接收器
- *
- * Created by gavin on 15-4-29.
- */
 public class Receptor {
 
     public Object receiver;
@@ -23,7 +18,7 @@ public class Receptor {
 
     @Override
     public String toString() {
-        return super.toString();
+        return receiver.getClass().getName() + "," + method.getName();
     }
 
     @Override

@@ -5,26 +5,40 @@ package cn.gavinliu.android.lib.eventcast.utils;
  */
 public class Utils {
 
-    public static String makeParameterTypesName(Class<?>[] parameterTypes) {
+    public static String makeParameterTypesName(Class<?>... parameterTypes) {
         if (parameterTypes == null || parameterTypes.length == 0) {
             return null;
         }
         String name = "";
-        for (Class<?> type : parameterTypes) {
+
+        for (int i = 0; i < parameterTypes.length; i++) {
+            Class<?> type = parameterTypes[i];
             type = convertType(type);
-            name += type.getName() + ",";
+            name += type.getName();
+
+            if (i != parameterTypes.length - 1) {
+                name += ",";
+            }
+
         }
         return name;
     }
 
-    public static String makeParameterTypesName(Object[] parameterTypes) {
+    public static String makeParameterTypesName(Object... parameterTypes) {
         if (parameterTypes == null || parameterTypes.length == 0) {
             return null;
         }
         String name = "";
-        for (Object type : parameterTypes) {
-            name += type.getClass().getName() + ",";
+
+        for (int i = 0; i < parameterTypes.length; i++) {
+            Object type = parameterTypes[i];
+            name += type.getClass().getName();
+
+            if (i != parameterTypes.length - 1) {
+                name += ",";
+            }
         }
+
         return name;
     }
 

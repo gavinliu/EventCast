@@ -12,10 +12,10 @@ import cn.gavinliu.android.lib.eventcast.annotation.Receiver;
  */
 public class EventAction {
 
-    String className;
-    String methodName;
-    String parameterTypesName;
-    String tag;
+    public String className;
+    public String methodName;
+    public String parameterTypesName;
+    public String tag;
 
     public EventAction(String className, String methodName, String parameterTypesName, String tag) {
         this.className = className;
@@ -26,7 +26,11 @@ public class EventAction {
 
     @Override
     public String toString() {
-        return super.toString();
+        if (tag != null && !tag.equals(Receiver.NULL_TAG)) {
+            return "Tag:" + tag + ",ParameterTypesName:" + parameterTypesName;
+        } else {
+            return "Class:" + className + ",MethodName:" + methodName + ",ParameterTypesName:" + parameterTypesName;
+        }
     }
 
     @Override

@@ -1,7 +1,5 @@
 package cn.gavinliu.android.lib.eventcast;
 
-import android.util.Log;
-
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,17 +9,18 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import cn.gavinliu.android.lib.eventcast.annotation.Receiver;
 import cn.gavinliu.android.lib.eventcast.event.EventAction;
+import cn.gavinliu.android.lib.eventcast.logger.L;
 import cn.gavinliu.android.lib.eventcast.poster.PosterType;
 import cn.gavinliu.android.lib.eventcast.utils.Utils;
 
 /**
  * Created by gavin on 15-4-29.
  */
-public class ReceiverMethodFinder {
+public class ReceiverMethodSpider {
 
     Map<EventAction, CopyOnWriteArrayList<Receptor>> mReceptorMap;
 
-    public ReceiverMethodFinder(Map<EventAction, CopyOnWriteArrayList<Receptor>> receptorMap) {
+    public ReceiverMethodSpider(Map<EventAction, CopyOnWriteArrayList<Receptor>> receptorMap) {
         this.mReceptorMap = receptorMap;
     }
 
@@ -35,7 +34,6 @@ public class ReceiverMethodFinder {
                 Receiver annotation = method.getAnnotation(Receiver.class);
                 if (annotation != null) {
                     Class<?>[] parameterTypes = method.getParameterTypes();
-
 
                     PosterType posterType = annotation.posterType();
                     String parameterTypesName = Utils.makeParameterTypesName(parameterTypes);
@@ -60,8 +58,8 @@ public class ReceiverMethodFinder {
         }
     }
 
-    private void add(EventAction receiverAction, Receptor receptor) {
-        CopyOnWriteArrayList<Receptor> receptors = mReceptorMap.get(receiverAction);
+    private void add(EventAction eventAction, Receptor receptor) {
+        CopyOnWriteArrayList<Receptor> receptors = mReceptorMap.get(eventAction);
 
         if (receptors == null) {
             receptors = new CopyOnWriteArrayList<Receptor>();
@@ -72,8 +70,9 @@ public class ReceiverMethodFinder {
         }
 
         receptors.add(receptor);
-
-        mReceptorMap.put(receiverAction, receptors);
+        L.d("增加 EventAction: " + eventAction.toString());
+        L.d("增加 Receptor: " + receptor.toString());
+        mReceptorMap.put(eventAction, receptors);
     }
 
     public void removeReceiverMethod(Object receiver) {
@@ -85,7 +84,7 @@ public class ReceiverMethodFinder {
 
                 for (Receptor receptor : receptors) {
                     if (receptor.receiver.equals(receiver)) {
-                        Log.d("", "### 移除订阅 " + receiver.getClass().getName());
+                        L.d("删除: " + receptor.toString());
                         findReceptors.add(receptor);
                     }
                 }

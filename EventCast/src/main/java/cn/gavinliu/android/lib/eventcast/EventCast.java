@@ -9,6 +9,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import cn.gavinliu.android.lib.eventcast.event.Event;
 import cn.gavinliu.android.lib.eventcast.event.EventAction;
+import cn.gavinliu.android.lib.eventcast.logger.L;
+import cn.gavinliu.android.lib.eventcast.match.WidelyMatchPolicy;
 import cn.gavinliu.android.lib.eventcast.poster.AsyncThreadPoster;
 import cn.gavinliu.android.lib.eventcast.poster.EventPoster;
 import cn.gavinliu.android.lib.eventcast.poster.MainThreadPoster;
@@ -20,18 +22,10 @@ import cn.gavinliu.android.lib.eventcast.utils.Utils;
  */
 public class EventCast {
 
-    private final Map<EventAction, CopyOnWriteArrayList<Receptor>> mReceptorMap = new ConcurrentHashMap<EventAction, CopyOnWriteArrayList<Receptor>>();
-
-    ReceiverMethodFinder mReceiverMethodFinder = new ReceiverMethodFinder(mReceptorMap);
-
-    ThreadLocal<Queue<Event>> mEventQueue = new ThreadLocal<Queue<Event>>() {
-        @Override
-        protected Queue<Event> initialValue() {
-            return new ConcurrentLinkedQueue<Event>();
-        }
-    };
-
-    EventDispatcher mEventDispatcher = new EventDispatcher();
+    private final Map<EventAction, CopyOnWriteArrayList<Receptor>> mReceptorMap;
+    private final ThreadLocal<Queue<Event>> mEventQueue;
+    private ReceiverMethodSpider mReceiverMethodSpider;
+    private EventDispatcher mEventDispatcher;
 
     private static class EventCastLoader {
         private static final EventCast instance = new EventCast();
@@ -42,6 +36,22 @@ public class EventCast {
     }
 
     private EventCast() {
+        setDebug(true);
+        mReceptorMap = new ConcurrentHashMap<EventAction, CopyOnWriteArrayList<Receptor>>();
+        mEventQueue = new ThreadLocal<Queue<Event>>() {
+
+            @Override
+            protected Queue<Event> initialValue() {
+                return new ConcurrentLinkedQueue<Event>();
+            }
+
+        };
+        mReceiverMethodSpider = new ReceiverMethodSpider(mReceptorMap);
+        mEventDispatcher = new EventDispatcher();
+    }
+
+    public void setDebug(boolean isDebug) {
+        L.isDEBUG = isDebug;
     }
 
     public void register(Object receiver) {
@@ -50,7 +60,7 @@ public class EventCast {
         }
 
         synchronized (this) {
-            mReceiverMethodFinder.findReceiverMethod(receiver);
+            mReceiverMethodSpider.findReceiverMethod(receiver);
         }
     }
 
@@ -60,13 +70,10 @@ public class EventCast {
         }
 
         synchronized (this) {
-            mReceiverMethodFinder.removeReceiverMethod(receiver);
+            mReceiverMethodSpider.removeReceiverMethod(receiver);
         }
     }
 
-    /**
-     * 通知所有 tag 的方法
-     */
     public void post(String tag, Object... data) {
         String types;
 
@@ -79,9 +86,6 @@ public class EventCast {
         notify(action, data);
     }
 
-    /**
-     * 通知 class 的 method 方法,此方法有参数
-     */
     public void post(Class<?> clazz, String method, Object... data) {
         String types;
 
@@ -90,13 +94,12 @@ public class EventCast {
         } else {
             types = Utils.makeParameterTypesName(data);
         }
-
         EventAction action = new EventAction(clazz.getName(), method, types, null);
         notify(action, data);
     }
 
-    private void notify(EventAction action, Object[] datas) {
-        Event event = new Event(action, datas);
+    private void notify(EventAction action, Object[] data) {
+        Event event = new Event(action, data);
         mEventQueue.get().offer(event);
 
         mEventDispatcher.dispatchEvents();
@@ -108,29 +111,59 @@ public class EventCast {
         Poster postPoster = new EventPoster();
         Poster asyncPoster = new AsyncThreadPoster();
 
+        Map<EventAction, List<EventAction>> cache = new ConcurrentHashMap<EventAction, List<EventAction>>();
+
+        WidelyMatchPolicy matchPolicy = new WidelyMatchPolicy();
+
         void dispatchEvents() {
             Queue<Event> eventQueue = mEventQueue.get();
             while (eventQueue.size() > 0) {
                 Event event = eventQueue.poll();
 
-                List<Receptor> receptors = mReceptorMap.get(event.eventAction);
-                if (receptors == null) {
-                    return;
-                }
+                if (event.data != null && event.data.length == 1) {
 
-                for (Receptor receptor : receptors) {
-                    switch (receptor.posterType) {
-                        case MAIN:
-                            mainPoster.post(receptor, event.data);
-                            break;
-                        case POST:
-                            postPoster.post(receptor, event.data);
-                            break;
-                        case ASYNC:
-                            asyncPoster.post(receptor, event.data);
-                            break;
+                    L.d("DispatchEvents: By Widely");
+                    List<EventAction> actions;
+                    if (cache.containsKey(event.eventAction)) {
+                        actions = cache.get(event.eventAction);
+                    } else {
+                        actions = matchPolicy.findMatchEventActions(event.eventAction, event.data[0]);
+                        cache.put(event.eventAction, actions);
                     }
 
+                    for (EventAction action : actions) {
+                        dispatch(action, event.data);
+                    }
+
+                } else {
+                    L.d("DispatchEvents");
+
+                    dispatch(event.eventAction, event.data);
+                }
+
+            }
+        }
+
+        void dispatch(EventAction eventAction, Object[] data) {
+            List<Receptor> receptors = mReceptorMap.get(eventAction);
+            if (receptors == null) {
+                L.d("Not Found: " + eventAction.toString());
+                L.d("Now ReceptorMap: " + mReceptorMap);
+                return;
+            }
+
+            for (Receptor receptor : receptors) {
+                L.d("Post: " + receptor.toString());
+                switch (receptor.posterType) {
+                    case MAIN:
+                        mainPoster.post(receptor, data);
+                        break;
+                    case POST:
+                        postPoster.post(receptor, data);
+                        break;
+                    case ASYNC:
+                        asyncPoster.post(receptor, data);
+                        break;
                 }
 
             }
