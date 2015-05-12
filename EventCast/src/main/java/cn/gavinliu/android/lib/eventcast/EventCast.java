@@ -65,41 +65,32 @@ public class EventCast {
     }
 
     /**
-     * 通知所有 tag 的方法,此方法没有参数
-     */
-    public void post(String tag) {
-        EventAction action = new EventAction(null, null, null, tag);
-        notify(action, null);
-    }
-
-    /**
-     * 通知所有 tag 的方法,此方法有参数
+     * 通知所有 tag 的方法
      */
     public void post(String tag, Object... data) {
+        String types;
+
         if (data == null) {
-            throw new NullPointerException("events不能为null");
+            types = null;
+        } else {
+            types = Utils.makeParameterTypesName(data);
         }
-        String types = Utils.makeParameterTypesName(data);
         EventAction action = new EventAction(null, null, types, tag);
         notify(action, data);
-    }
-
-    /**
-     * 通知 class 的 method 方法,此方法没有参数
-     */
-    public void post(Class<?> clazz, String method) {
-        EventAction action = new EventAction(clazz.getName(), method, null, null);
-        notify(action, null);
     }
 
     /**
      * 通知 class 的 method 方法,此方法有参数
      */
     public void post(Class<?> clazz, String method, Object... data) {
+        String types;
+
         if (data == null) {
-            throw new NullPointerException("events不能为null");
+            types = null;
+        } else {
+            types = Utils.makeParameterTypesName(data);
         }
-        String types = Utils.makeParameterTypesName(data);
+
         EventAction action = new EventAction(clazz.getName(), method, types, null);
         notify(action, data);
     }
