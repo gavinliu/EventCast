@@ -5,6 +5,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.gavinliu.android.lib.eventcast.EventCast;
 import cn.gavinliu.android.lib.eventcast.annotation.Receiver;
 import cn.gavinliu.android.lib.eventcast.poster.PosterType;
@@ -21,7 +25,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        EventCast.getInstance().unRegister(this);
+        EventCast.getInstance().unregister(this);
     }
 
     @Receiver
@@ -60,6 +64,15 @@ public class MainActivity extends ActionBarActivity {
     public void postByTagAndParam(View v) {
         // post tag and param
         EventCast.getInstance().post("xx", 1, 2);
+    }
+
+    @Receiver(tag = "xx", posterType = PosterType.POST)
+    public void testGenericsType(List<String> s) {
+        Toast.makeText(this, "testGenericsType: ", Toast.LENGTH_SHORT).show();
+    }
+
+    public void testGenericsType(View v) {
+        EventCast.getInstance().post("xx", new ArrayList<String>());
     }
 
 }

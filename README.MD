@@ -8,7 +8,7 @@ A new EventCast for Android
 
 ### Including
 
-Last version is 0.1
+Last version is 0.2
 
 Gradle:
 
@@ -101,6 +101,17 @@ public void postByMethodAndParam(String x) {
 
 EventCast.getInstance().post(MainActivity.class, "postByMethodAndParam", "Hello~");
 ```
+
+* Use Generics Type
+
+@Receiver(tag = "xx", posterType = PosterType.POST)
+public void testGenericsType(List<String> s) {
+    Toast.makeText(this, "testGenericsType: ", Toast.LENGTH_SHORT).show();
+}
+
+public void testGenericsType(View v) {
+    EventCast.getInstance().post("xx", new ArrayList<String>());
+}
 
 ## Trap (important!)
 

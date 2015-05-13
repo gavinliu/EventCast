@@ -37,4 +37,11 @@
         android:onClick="postByTagAndParam"
         android:text="Post by Tag and Param" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|start"
+        android:onClick="testGenericsType"
+        android:text="Test Generics Type" />
+
 </LinearLayout>
