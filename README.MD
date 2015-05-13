@@ -104,14 +104,16 @@ EventCast.getInstance().post(MainActivity.class, "postByMethodAndParam", "Hello~
 
 * Use Generics Type
 
+```java
 @Receiver(tag = "xx", posterType = PosterType.POST)
 public void testGenericsType(List<String> s) {
     Toast.makeText(this, "testGenericsType: ", Toast.LENGTH_SHORT).show();
 }
 
-public void testGenericsType(View v) {
-    EventCast.getInstance().post("xx", new ArrayList<String>());
-}
+... other code ...
+
+EventCast.getInstance().post("xx", new ArrayList<String>());
+```
 
 ## Trap (important!)
 
